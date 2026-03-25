@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f7;
+            padding: 40px 20px;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 71, 70, 0.08);
+            max-width: 800px;
+            margin: auto;
+            border-top: 6px solid #004746;
+        }
+
+        h2 {
+            color: #004746;
+            font-weight: 700;
+        }
+
+        .text-muted {
+            color: #6b7a7a !important;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #004746;
+            font-size: 0.95rem;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #f8fafa;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-error {
+            border-color: #e63946 !important;
+            box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25) !important;
+            background-color: #fff5f5 !important;
+        }
+
+        .form-check-input.input-error {
+            background-color: transparent !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #007573;
+            box-shadow: 0 0 0 0.25rem rgba(0, 117, 115, 0.25);
+        }
+
+        .hidden-field {
+            display: none;
+        }
+
+        .btn-submit {
+            background-color: #007573;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.1s, box-shadow 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(0, 117, 115, 0.2);
+        }
+
+        .btn-submit:hover {
+            background-color: #004746;
+            color: white;
+            box-shadow: 0 6px 12px rgba(0, 71, 70, 0.3);
+        }
+
+        .spinner-border {
+            display: none;
+        }
+
+        /* Edit Specific */
+        #loginSection {
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+    
+        <!-- LOGIN SECTION -->
+        <div id="loginSection" class="form-container">
+            <h2 class="mb-3">Edit Registration</h2>
+            <p class="text-muted mb-4">Please log in using your email address and the 8-character Secret Edit Code sent to your inbox.</p>
+            
+            <div id="loginAlertMsg" class="alert d-none" role="alert"></div>
+            
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                <div class="mb-3 text-start">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" name="loginEmail" id="loginEmail" required>
+                </div>
+                <div class="mb-4 text-start">
+                    <label class="form-label">Secret Edit Code</label>
+                    <input type="text" class="form-control" name="loginCode" id="loginCode" style="font-family: monospace; letter-spacing: 2px;" placeholder="e.g. A1B2C3D4" required>
+                </div>
+                <button type="submit" class="btn btn-submit" id="loginBtn">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" id="loginSpinner"></span>
+                    Secure Login
+                </button>
+            </form>
+        </div>
+
+        <!-- EDIT FORM SECTION -->
+        <div id="editSection" class="form-container" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Update Details</h2>
+                <button class="btn btn-outline-secondary btn-sm" onclick="location.reload()">Logout</button>
+            </div>
+
+            <div id="editAlertMsg" class="alert alert-info" role="alert">
+                Make your changes below and click <strong>Save Updates</strong>. Your Email Address is locked.
+            </div>
+
+            <form id="editForm" onsubmit="handleUpdateSubmit(event)">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="secretCode" id="hiddenSecretCode">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name (First Name, Family Name) *</label>
+                        <input type="text" class="form-control" name="fullName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email Address (Locked)</label>
+                        <input type="email" class="form-control" name="email" id="editFormEmail" style="background-color: #e9ecef; cursor: not-allowed;" readonly required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gender *</label>
+                        <select class="form-select" name="gender" required>
+                            <option value="" disabled>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nationality *</label>
+                        <input type="text" class="form-control" name="nationality" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Institution / Organization *</label>
+                    <input type="text" class="form-control" name="institution" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Position / Title *</label>
+                        <input type="text" class="form-control" name="position" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Current Occupation *</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occStudent" value="Student" required>
+                            <label class="form-check-label" for="occStudent">Student</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occFaculty" value="Faculty">
+                            <label class="form-check-label" for="occFaculty">Faculty</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occResearcher" value="Researcher">
+                            <label class="form-check-label" for="occResearcher">Researcher</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occCommercial" value="Commercial Mushroom Grower">
+                            <label class="form-check-label" for="occCommercial">Commercial Mushroom Grower</label>
+                        </div>
+                        <div class="form-check d-flex align-items-end mb-2">
+                            <input class="form-check-input me-2 mb-1" type="radio" name="occupation" id="occOther" value="Other">
+                            <label class="form-check-label text-nowrap me-2" for="occOther">Other:</label>
+                            <input type="text" class="form-control border-0 border-bottom rounded-0 shadow-none px-1 py-0 mb-1" style="background-color: transparent; flex-grow: 1;" name="occupationOther" onclick="document.getElementById('occOther').checked = true;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone Number (with country code) *</label>
+                    <input type="tel" class="form-control" name="phone" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Address *</label>
+                    <textarea class="form-control" name="workAddress" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Arrival Date in Chiang Rai (Thailand) *</label>
+                    <input type="date" class="form-control" name="arrivalDate" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label d-block">Do you require an invitation letter for Visa application? *</label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="visaRequired" id="visaYes" value="Yes" onchange="toggleVisaField()" required>
+                        <label class="form-check-label" for="visaYes">Yes</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="visaRequired" id="visaNo" value="No" onchange="toggleVisaField()">
+                        <label class="form-check-label" for="visaNo">No</label>
+                    </div>
+                </div>
+
+                <div class="mb-3 hidden-field" id="visaAddressContainer">
+                    <label class="form-label">If an invitation is required, to whom will it be addressed?</label>
+                    <textarea class="form-control" id="visaAddress" name="visaAddress" rows="2"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Accommodation? (Pay by yourself) *</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="accommodation" id="accHelp" value="Need help for booking" required>
+                            <label class="form-check-label" for="accHelp">Need help for booking</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="accommodation" id="accSelf" value="Booking by yourself">
+                            <label class="form-check-label" for="accSelf">Booking by yourself</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Food Preference? *</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodNone" value="No restriction" required>
+                            <label class="form-check-label" for="foodNone">No restriction</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodVeg" value="Vegetarian">
+                            <label class="form-check-label" for="foodVeg">Vegetarian</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodVegan" value="Vegan">
+                            <label class="form-check-label" for="foodVegan">Vegan</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodHalal" value="Halal">
+                            <label class="form-check-label" for="foodHalal">Halal</label>
+                        </div>
+                        <div class="form-check d-flex align-items-end mb-2">
+                            <input class="form-check-input me-2 mb-1" type="radio" name="foodPreference" id="foodOther" value="Other">
+                            <label class="form-check-label text-nowrap me-2" for="foodOther">Other:</label>
+                            <input type="text" class="form-control border-0 border-bottom rounded-0 shadow-none px-1 py-0 mb-1" style="background-color: transparent; flex-grow: 1;" name="foodPreferenceOther" onclick="document.getElementById('foodOther').checked = true;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 d-none">
+                    <!-- Kept hidden to comply with underlying form structure, inherently Yes if updating -->
+                    <input type="checkbox" name="confirm" value="Yes" checked>
+                </div>
+
+                <button type="submit" class="btn btn-submit" id="updateBtn">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" id="updateSpinner"></span>
+                    Save Updates
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // MUST MATCH YOUR INDEX.HTML DEPLOYED SCRIPT URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRlnRulikYAPNGeDHC7XVextEarqjqasXYGoZctJExnXXfs_8TqXG1EAb15VbzdM55/exec";
+
+        // Toggle Visa Address field
+        function toggleVisaField() {
+            var visaYes = document.getElementById("visaYes");
+            var addressContainer = document.getElementById("visaAddressContainer");
+            var addressInput = document.getElementById("visaAddress");
+
+            if (visaYes && visaYes.checked) {
+                addressContainer.classList.remove("hidden-field");
+                addressInput.setAttribute("required", "required");
+            } else {
+                addressContainer.classList.add("hidden-field");
+                addressInput.removeAttribute("required");
+                addressInput.value = "";
+            }
+        }
+
+        // Setup validation highlighting for edit form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for magic link auto-login URL parameters
+            var params = new URLSearchParams(window.location.search);
+            var urlEmail = params.get('email');
+            var urlCode = params.get('code');
+            
+            if (urlEmail && urlCode) {
+                document.getElementById('loginEmail').value = urlEmail;
+                document.getElementById('loginCode').value = urlCode;
+                document.getElementById('loginBtn').click(); // Auto-trigger login sequence
+            }
+
+            var inputs = document.querySelectorAll('#editForm .form-control, #editForm .form-select, #editForm .form-check-input');
+            inputs.forEach(function(input) {
+                input.addEventListener('invalid', function(e) {
+                    e.target.classList.add('input-error');
+                });
+                input.addEventListener('input', function(e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function(r) { r.classList.remove('input-error'); });
+                        }
+                    }
+                });
+                input.addEventListener('change', function(e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function(r) { r.classList.remove('input-error'); });
+                        }
+                    }
+                });
+            });
+        });
+
+        // Step 1: Login & Fetch Data
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            var email = document.getElementById('loginEmail').value.trim();
+            var code = document.getElementById('loginCode').value.trim();
+            var loginBtn = document.getElementById('loginBtn');
+            var loginSpinner = document.getElementById('loginSpinner');
+            var alertMsg = document.getElementById('loginAlertMsg');
+
+            loginBtn.disabled = true;
+            loginSpinner.style.display = 'inline-block';
+            alertMsg.classList.add('d-none');
+
+            var payload = new URLSearchParams();
+            payload.append('action', 'fetch');
+            payload.append('email', email);
+            payload.append('secretCode', code);
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: payload
+            })
+            .then(response => response.json())
+            .then(res => {
+                loginBtn.disabled = false;
+                loginSpinner.style.display = 'none';
+                
+                if (res.status === "Success") {
+                    populateForm(res.data, code);
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('editSection').style.display = 'block';
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error(res.message);
+                }
+            })
+            .catch(error => {
+                loginBtn.disabled = false;
+                loginSpinner.style.display = 'none';
+                alertMsg.className = "alert alert-danger";
+                alertMsg.textContent = "Error: " + error.message;
+                alertMsg.classList.remove('d-none');
+            });
+        }
+
+        // Helper to populate fields gracefully
+        function populateForm(data, secretCode) {
+            var form = document.getElementById('editForm');
+            
+            // Set Hidden Identifiers
+            document.getElementById('editFormEmail').value = data['Email'] || '';
+            document.getElementById('hiddenSecretCode').value = secretCode;
+            
+            // Standard Inputs
+            form.elements['fullName'].value = data['Full Name'] || '';
+            form.elements['nationality'].value = data['Nationality'] || '';
+            form.elements['institution'].value = data['Institution / Organization'] || '';
+            form.elements['position'].value = data['Position / Title'] || '';
+            form.elements['phone'].value = data['Phone'] || '';
+            form.elements['workAddress'].value = data['Work Address'] || '';
+            form.elements['arrivalDate'].value = (data['Arrival Date in Chiang Rai'] || '').split('T')[0]; // Format Date if needed
+            
+            // Selects
+            if(data['Gender']) form.elements['gender'].value = data['Gender'];
+            
+            // Generic Radio Helper
+            function setRadio(name, val, otherBoxId, otherInputName) {
+                var match = document.querySelector(`input[name="${name}"][value="${val}"]`);
+                if (match) {
+                    match.checked = true;
+                } else if (val && val !== 'N/A') {
+                    document.getElementById(otherBoxId).checked = true;
+                    form.elements[otherInputName].value = val;
+                }
+            }
+            
+            setRadio('occupation', data['Current Occupation'], 'occOther', 'occupationOther');
+            setRadio('foodPreference', data['Food Preference'], 'foodOther', 'foodPreferenceOther');
+            
+            // Specific Radios
+            var accMatch = document.querySelector(`input[name="accommodation"][value="${data['Accommodation']}"]`);
+            if(accMatch) accMatch.checked = true;
+            
+            var visaMatch = document.querySelector(`input[name="visaRequired"][value="${data['Requires Visa Invitation']}"]`);
+            if(visaMatch) visaMatch.checked = true;
+            
+            if (data['Requires Visa Invitation'] === "Yes") {
+                form.elements['visaAddress'].value = data['Invitation Addressed To'] || '';
+            }
+            toggleVisaField(); // Refresh UI State
+        }
+
+        // Step 2: Save Updates
+        function handleUpdateSubmit(event) {
+            event.preventDefault();
+            var form = document.getElementById('editForm');
+            var updateBtn = document.getElementById('updateBtn');
+            var updateSpinner = document.getElementById('updateSpinner');
+            var alertMsg = document.getElementById('editAlertMsg');
+
+            updateBtn.disabled = true;
+            updateSpinner.style.display = 'inline-block';
+            alertMsg.className = "alert alert-info";
+            alertMsg.textContent = "Saving changes...";
+
+            var searchParams = new URLSearchParams(new FormData(form));
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: searchParams
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateBtn.disabled = false;
+                updateSpinner.style.display = 'none';
+                
+                if (data.status === "Success") {
+                    alertMsg.className = "alert alert-success";
+                    alertMsg.textContent = "Success! Your registration details have been updated.";
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                updateBtn.disabled = false;
+                updateSpinner.style.display = 'none';
+                alertMsg.className = "alert alert-danger";
+                alertMsg.textContent = "Error: " + error.message;
+            });
+        }
+    </script>
+
+</body>
+
+</html>
