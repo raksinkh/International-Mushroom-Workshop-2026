@@ -636,15 +636,20 @@
     if (visaMatch) visaMatch.checked = true;
 
     if (data['Requires Visa Invitation'] === "Yes") {
-    form.elements['embassyName'].value = data['Embassy Name'] || '';
-    var linkContainer = document.getElementById('passportLinkContainer');
-    if (data['Passport Link'] && data['Passport Link'] !== 'N/A') {
-    linkContainer.innerHTML = `<a href="${data['Passport Link']}" target="_blank"
-        class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
-    } else {
-    linkContainer.innerHTML = `<span class="text-danger small d-block mb-2">No passport uploaded yet.</span>`;
-    document.getElementById('passportFile').setAttribute('required', 'required');
-    }
+        form.elements['embassyName'].value = data['Embassy Name'] || '';
+        var linkContainer = document.getElementById('passportLinkContainer');
+        
+        // [SECURITY UPDATE] Masking the real link.
+        if (data['Passport Link'] === 'PROTECTED') {
+            linkContainer.innerHTML = `<div class="alert alert-success py-2 mb-2" style="font-size: 0.9rem;">
+                ✅ Current Passport Document is Securely Uploaded
+            </div>`;
+        } else if (data['Passport Link'] && data['Passport Link'] !== 'N/A') {
+            linkContainer.innerHTML = `<a href="${data['Passport Link']}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
+        } else {
+            linkContainer.innerHTML = `<span class="text-danger small d-block mb-2">No passport uploaded yet.</span>`;
+            document.getElementById('passportFile').setAttribute('required', 'required');
+        }
     }
     toggleVisaField(); // Refresh UI State
     }
@@ -667,13 +672,19 @@
     var visaRequired = formData.get('visaRequired');
 
     if (visaRequired === 'Yes') {
-    const fileInput = document.getElementById('passportFile');
-    if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const base64Content = await readFileAsBase64(file);
-    formData.append('passportFileContent', base64Content);
-    formData.append('passportFileName', file.name);
-    }
+        const fileInput = document.getElementById('passportFile');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            
+            // [UX UPDATE] 5MB File Size Limit Check
+            if (file.size > 5 * 1024 * 1024) {
+                throw new Error("File is too large (" + (file.size/1024/1024).toFixed(2) + "MB). Please upload a file smaller than 5MB.");
+            }
+
+            const base64Content = await readFileAsBase64(file);
+            formData.append('passportFileContent', base64Content);
+            formData.append('passportFileName', file.name);
+        }
     }
 
     // Remove file object
