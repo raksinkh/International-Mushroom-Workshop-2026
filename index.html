@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f7f7;
+            padding: 40px 20px;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+
+        .form-container {
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 71, 70, 0.08);
+            max-width: 800px;
+            margin: auto;
+            border-top: 6px solid #004746;
+        }
+
+        h2 {
+            color: #004746;
+            font-weight: 700;
+        }
+
+        .text-muted {
+            color: #6b7a7a !important;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #004746;
+            font-size: 0.95rem;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #f8fafa;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-error {
+            border-color: #e63946 !important;
+            box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25) !important;
+            background-color: #fff5f5 !important;
+        }
+
+        .form-check-input.input-error {
+            background-color: transparent !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #007573;
+            box-shadow: 0 0 0 0.25rem rgba(0, 117, 115, 0.25);
+        }
+
+        .hidden-field {
+            display: none;
+        }
+
+        .btn-submit {
+            background-color: #007573;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.1s, box-shadow 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(0, 117, 115, 0.2);
+        }
+
+        .btn-submit:hover {
+            background-color: #004746;
+            color: white;
+            box-shadow: 0 6px 12px rgba(0, 71, 70, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 71, 70, 0.2);
+        }
+
+        .form-check-input:checked {
+            background-color: #007573;
+            border-color: #007573;
+        }
+
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.25rem rgba(0, 117, 115, 0.25);
+            border-color: #007573;
+        }
+
+        .spinner-border {
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #e6f2f2;
+            border-color: #007573;
+            color: #004746;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4 text-center">FMFC Global Training Programme</h2>
+            <p class="text-muted text-center mb-4">Innovative Farmers, Traditional Medicine, Healthy Foods and
+                Cosmetics.</p>
+
+            <div id="alertMessage" class="alert d-none" role="alert"></div>
+
+            <form id="registrationForm" onsubmit="handleFormSubmit(event)">
+
+                <div class="mb-4">
+                    <label class="form-label d-block text-uppercase"
+                        style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Programme
+                        Selection</label>
+                    <label class="form-label d-block">Please select ONE programme that you would like to attend:
+                        *</label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="programme" id="prog1"
+                            value="Integrating the Healthy Foods Value Chain: From Local to Functional Claim" required>
+                        <label class="form-check-label" for="prog1">"Integrating the Healthy Foods Value Chain: From
+                            Local to Functional Claim" <br><small class="text-muted">Training Date: 1-15 July
+                                2026</small></label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="programme" id="prog2"
+                            value="Smart Roots for ASEAN Future: From Traditional Wisdom to Innovative Agri-Preneur">
+                        <label class="form-check-label" for="prog2">"Smart Roots for ASEAN Future: From Traditional
+                            Wisdom to Innovative Agri-Preneur" <br><small class="text-muted">Training Date: 12-16 July
+                                2026</small></label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="programme" id="prog3"
+                            value="Traditional Medicine Development Programme: Herbal Processing, Extraction, and GMP/PIC/S-Compliant Product Manufacturing">
+                        <label class="form-check-label" for="prog3">"Traditional Medicine Development Programme: Herbal
+                            Processing, Extraction, and GMP/PIC/S-Compliant Product Manufacturing" <br><small
+                                class="text-muted">Training Date: 13-19 July 2026</small></label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="programme" id="prog4"
+                            value="Mushrooms from Wild to Table">
+                        <label class="form-check-label" for="prog4">"Mushrooms from Wild to Table" <br><small
+                                class="text-muted">Training Date: 18-24 July 2026</small></label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="programme" id="prog5"
+                            value="Herbal Bioactive Analysis and Applied Product Innovation Programme">
+                        <label class="form-check-label" for="prog5">"Herbal Bioactive Analysis and Applied Product
+                            Innovation Programme" <br><small class="text-muted">Training Date: 20-26 July
+                                2026</small></label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="programme" id="prog6"
+                            value="Hands-On Mastery in Cosmetics">
+                        <label class="form-check-label" for="prog6">"Hands-On Mastery in Cosmetics" <br><small
+                                class="text-muted">Training Date: 15-28 July 2026</small></label>
+                    </div>
+                </div>
+
+                <label class="form-label d-block text-uppercase mt-4"
+                    style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Personal
+                    Information</label>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name (First Name, Family Name) *</label>
+                        <input type="text" class="form-control" name="fullName" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Gender *</label>
+                        <select class="form-select" name="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nationality *</label>
+                        <input type="text" class="form-control" name="nationality" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label d-block text-uppercase mt-4"
+                        style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Education
+                        Background</label>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">Bachelor's Degree Programme:</label>
+                            <input type="text" class="form-control" name="eduBachelor" placeholder="e.g. B.Sc. Biology">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">Master's Degree Programme:</label>
+                            <input type="text" class="form-control" name="eduMaster" placeholder="e.g. M.Sc. Botany">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">Doctoral Degree Programme:</label>
+                            <input type="text" class="form-control" name="eduDoctoral"
+                                placeholder="e.g. Ph.D. Mycology">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">Other Background:</label>
+                            <input type="text" class="form-control" name="eduOther"
+                                placeholder="Specify any other relevant education">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="form-label d-block text-uppercase mt-4"
+                    style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Professional
+                    Information</label>
+
+                <div class="mb-3">
+                    <label class="form-label">Institution / Organization *</label>
+                    <input type="text" class="form-control" name="institution" required>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Position / Title *</label>
+                        <input type="text" class="form-control" name="position" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Current Occupation *</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occStudent"
+                                value="Student" required>
+                            <label class="form-check-label" for="occStudent">Student</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occFaculty"
+                                value="Faculty">
+                            <label class="form-check-label" for="occFaculty">Faculty</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="occupation" id="occResearcher"
+                                value="Researcher">
+                            <label class="form-check-label" for="occResearcher">Researcher</label>
+                        </div>
+
+                        <div class="form-check d-flex align-items-end mb-2">
+                            <input class="form-check-input me-2 mb-1" type="radio" name="occupation" id="occOther"
+                                value="Other">
+                            <label class="form-check-label text-nowrap me-2" for="occOther">Other:</label>
+                            <input type="text"
+                                class="form-control border-0 border-bottom rounded-0 shadow-none px-1 py-0 mb-1"
+                                style="background-color: transparent; flex-grow: 1;" name="occupationOther"
+                                onclick="document.getElementById('occOther').checked = true;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone Number (with country code) *</label>
+                    <input type="tel" class="form-control" name="phone" placeholder="e.g., +66 81 234 5678" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Address *</label>
+                    <textarea class="form-control" name="workAddress" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label d-block text-uppercase mt-4"
+                        style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Travel
+                        & Visa Information</label>
+
+                    <div class="mb-3">
+                        <label class="form-label">Arrival Date in Chiang Rai, Thailand (DD/MM/YYYY) *</label>
+                        <input type="date" class="form-control" name="arrivalDate" required>
+                    </div>
+
+                    <div class="mb-3 p-3"
+                        style="background-color: #f8fafa; border-radius: 8px; border: 1px dashed #ced4da;">
+                        <label class="form-label" style="color: #004746;">Arrival Flight Details:</label>
+                        <div class="row">
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="arrivalFlightNum" placeholder="Flight Number"></div>
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="arrivalFlightFrom" placeholder="From"></div>
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="arrivalFlightTo" placeholder="To"></div>
+                        </div>
+
+                        <label class="form-label mt-2" style="color: #004746;">Departure Flight Details:</label>
+                        <div class="row">
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="departureFlightNum" placeholder="Flight Number"></div>
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="departureFlightFrom" placeholder="From"></div>
+                            <div class="col-md-4 mb-2"><input type="text" class="form-control form-control-sm"
+                                    name="departureFlightTo" placeholder="To"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label d-block">Do you require an invitation letter for Visa application?
+                        *</label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="visaRequired" id="visaYes" value="Yes"
+                            onchange="toggleVisaField()" required>
+                        <label class="form-check-label" for="visaYes">Yes</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="visaRequired" id="visaNo" value="No"
+                            onchange="toggleVisaField()">
+                        <label class="form-check-label" for="visaNo">No</label>
+                    </div>
+                </div>
+
+                <div class="mb-3 hidden-field" id="visaDetailsContainer">
+                    <div class="mb-3">
+                        <label class="form-label">If yes, please upload a copy of your passport. *</label>
+                        <input type="file" class="form-control" id="passportFile" name="passportFile"
+                            accept="image/*,.pdf">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Name of the Royal Thai Embassy/Consulate-General where you will apply
+                            for a visa: *</label>
+                        <input type="text" class="form-control" id="embassyName" name="embassyName"
+                            placeholder="e.g. Embassy in Beijing">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Accommodation? (Pay by yourself) *</label>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="accommodation" id="accHelp"
+                                value="Wanawes – the on-campus hostel is recommended. The room rate with breakfast is 850 THB per room per night. Reservation: wanawes@mfu.ac.th Tel: +66 53 917899"
+                                required>
+                            <label class="form-check-label" for="accHelp" style="line-height:1.4;">
+                                Wanawes – the on-campus hostel is recommended.<br>
+                                <span class="text-muted" style="font-size:0.9em;">The room rate with breakfast is 850
+                                    THB per room per night.</span><br>
+                                <span class="text-muted" style="font-size:0.9em;">Reservation:
+                                    wanawes@mfu.ac.th</span><br>
+                                <span class="text-muted" style="font-size:0.9em;">Tel: +66 53 917899</span>
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="accommodation" id="accSelf"
+                                value="Booking by yourself">
+                            <label class="form-check-label" for="accSelf">Booking by yourself</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label d-block">Food Preference? *</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodNone"
+                                value="No restriction" required>
+                            <label class="form-check-label" for="foodNone">No restriction</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodVeg"
+                                value="Vegetarian">
+                            <label class="form-check-label" for="foodVeg">Vegetarian</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodVegan"
+                                value="Vegan">
+                            <label class="form-check-label" for="foodVegan">Vegan</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="foodPreference" id="foodHalal"
+                                value="Halal">
+                            <label class="form-check-label" for="foodHalal">Halal</label>
+                        </div>
+                        <div class="form-check d-flex align-items-end mb-2">
+                            <input class="form-check-input me-2 mb-1" type="radio" name="foodPreference" id="foodOther"
+                                value="Other">
+                            <label class="form-check-label text-nowrap me-2" for="foodOther">Other:</label>
+                            <input type="text"
+                                class="form-control border-0 border-bottom rounded-0 shadow-none px-1 py-0 mb-1"
+                                style="background-color: transparent; flex-grow: 1;" name="foodPreferenceOther"
+                                onclick="document.getElementById('foodOther').checked = true;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 p-3"
+                    style="background-color: #fffafa; border-left: 4px solid #e63946; border-radius: 4px;">
+                    <label class="form-label text-uppercase mb-2" style="color: #e63946;">Emergency Contact *</label>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <input type="text" class="form-control" name="emgName" placeholder="Name" required>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <input type="text" class="form-control" name="emgRelationship" placeholder="Relationship"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <input type="tel" class="form-control" name="emgPhone" placeholder="Phone Number" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label d-block text-uppercase mt-4"
+                        style="color: #007573; font-size: 1.1rem; border-bottom: 2px solid #007573; padding-bottom: 5px; margin-bottom: 15px;">Confirmations</label>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="confirm" id="confirmYes" value="Yes"
+                            required>
+                        <label class="form-check-label fw-bold" for="confirmYes">I confirm that the information provided
+                            is correct. *</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="consentData" id="consentData" value="Yes"
+                            required>
+                        <label class="form-check-label fw-bold" for="consentData">I consent to the collection and use of
+                            my personal data for the purposes of this training programme. *</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-submit" id="submitBtn">
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Submit Registration
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryfj6vK-8QlmnXWezf9SjdfOzFWEWPlpnzwrZI7Twovv1pIljwD8sNDTAhW65rnE9/exec"; // Replace with your published Google Apps Script Web App URL
+
+        // Toggle the Visa Address field visibility
+        function toggleVisaField() {
+            var visaYes = document.getElementById("visaYes");
+            var detailsContainer = document.getElementById("visaDetailsContainer");
+            var passportInput = document.getElementById("passportFile");
+            var embassyInput = document.getElementById("embassyName");
+
+            if (visaYes && visaYes.checked) {
+                detailsContainer.classList.remove("hidden-field");
+                passportInput.setAttribute("required", "required");
+                embassyInput.setAttribute("required", "required");
+            } else {
+                detailsContainer.classList.add("hidden-field");
+                passportInput.removeAttribute("required");
+                embassyInput.removeAttribute("required");
+                passportInput.value = "";
+                embassyInput.value = "";
+            }
+        }
+
+        // Helper to read file as Base64
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Handle Form Submission via fetch API
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            var form = document.getElementById('registrationForm');
+            var submitBtn = document.getElementById('submitBtn');
+            var spinner = document.querySelector('.spinner-border');
+            var alertMsg = document.getElementById('alertMessage');
+
+            if (SCRIPT_URL === "YOUR_WEB_APP_URL_HERE") {
+                alert("Please replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Web App URL in the HTML code.");
+                return;
+            }
+
+            // UI Loading state
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            alertMsg.classList.add('d-none');
+
+            try {
+                var formData = new FormData(form);
+                var visaRequired = formData.get('visaRequired');
+
+                // If visa is required, handle the file upload
+                if (visaRequired === 'Yes') {
+                    const fileInput = document.getElementById('passportFile');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const base64Content = await readFileAsBase64(file);
+                        formData.append('passportFileContent', base64Content);
+                        formData.append('passportFileName', file.name);
+                    }
+                }
+
+                formData.append('action', 'register');
+
+                // Remove the actual file object from formData to avoid issues with URLSearchParams
+                formData.delete('passportFile');
+
+                var searchParams = new URLSearchParams(formData);
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: searchParams
+                });
+
+                const data = await response.json();
+
+                if (data.status === "Success") {
+                    // Dynamically inject the confirmation page into the current view
+                    document.querySelector('.container').innerHTML = `
+                    <div class="form-container" style="max-width: 600px; text-align: center; padding: 60px 40px; margin: auto;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #e6f2f2; color: #007573; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                            </svg>
+                        </div>
+                        <h2 style="color: #004746; font-weight: 700; margin-bottom: 20px;">Registration Successful</h2>
+                        <p style="color: #6b7a7a; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">Thank you for registering for the upcoming workshop in Chiang Rai. We have safely received your details and will be in touch soon.</p>
+                    </div>
+                `;
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error(data.message || "Unknown error occurred");
+                }
+            } catch (error) {
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                alertMsg.className = "alert alert-danger";
+                alertMsg.textContent = "Error: " + error.message;
+                alertMsg.classList.remove('d-none');
+            }
+        }
+
+        // Setup clear visual validation highlighting
+        document.addEventListener('DOMContentLoaded', function () {
+            var inputs = document.querySelectorAll('.form-control, .form-select, .form-check-input');
+
+            inputs.forEach(function (input) {
+                // When browser detects a missing required field upon submit
+                input.addEventListener('invalid', function (e) {
+                    e.target.classList.add('input-error');
+                });
+
+                // When user corrects the field
+                input.addEventListener('input', function (e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        // If it's a radio button, clear the error from all siblings in the same group
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function (radio) {
+                                radio.classList.remove('input-error');
+                            });
+                        }
+                    }
+                });
+
+                input.addEventListener('change', function (e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function (radio) {
+                                radio.classList.remove('input-error');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
