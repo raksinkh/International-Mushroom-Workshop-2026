@@ -337,7 +337,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block">Do you require an invitation letter for visa application? *</label>
+                    <label class="form-label d-block">Do you require an invitation letter for Visa application?
+                        *</label>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="visaRequired" id="visaYes" value="Yes"
                             onchange="toggleVisaField()" required>
@@ -352,16 +353,14 @@
 
                 <div class="mb-3 hidden-field" id="visaDetailsContainer">
                     <div class="mb-3">
-                        <label class="form-label">If yes, please upload a copy of your passport.</label>
-                        <input type="file" class="form-control" id="passportFile" name="passportFile" 
-                            accept=".jpg,.jpeg,.png,.pdf" onchange="validateFile(this)">
-                        <small class="text-muted">Allowed formats: JPG, PNG, PDF (Max 5MB)</small>
-                        <div id="currentPassport" class="mt-2" style="display:none;"></div>
+                        <label class="form-label">Passport Copy</label>
+                        <div id="passportLinkContainer" class="mb-2"></div>
+                        <input type="file" class="form-control" id="passportFile" name="passportFile" accept="image/*,.pdf">
+                        <small class="text-muted">Upload a new file only if you wish to update the current copy.</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Name of the Royal Thai Embassy/Consulate-General where you will apply for a visa: *</label>
-                        <input type="text" class="form-control" id="embassyName" name="embassyName" 
-                            placeholder="e.g. Royal Thai Embassy, Beijing">
+                        <input type="text" class="form-control" id="embassyName" name="embassyName" placeholder="e.g. Embassy in Beijing">
                     </div>
                 </div>
 
@@ -457,6 +456,7 @@
         // MUST MATCH YOUR INDEX.HTML DEPLOYED SCRIPT URL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYMm2JRaSSBe9V8pNXOTGFAcAhljfgLKTLxjbNlKQ57QV4cuuov86GtqV1U4ExuLKr/exec";
 
+        // Toggle Visa Address field
         function toggleVisaField() {
             var visaYes = document.getElementById("visaYes");
             var detailsContainer = document.getElementById("visaDetailsContainer");
@@ -465,11 +465,7 @@
 
             if (visaYes && visaYes.checked) {
                 detailsContainer.classList.remove("hidden-field");
-                // In edit mode, passport is not required if one already exists
-                var currentP = document.getElementById('currentPassport');
-                if (currentP && currentP.style.display === 'none') {
-                    passportInput.setAttribute("required", "required");
-                }
+                // In Edit mode, passport is optional if already uploaded
                 embassyInput.setAttribute("required", "required");
             } else {
                 detailsContainer.classList.add("hidden-field");
@@ -480,15 +476,14 @@
             }
         }
 
-        function validateFile(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                const maxSize = 5 * 1024 * 1024; // 5MB
-                if (file.size > maxSize) {
-                    alert("File is too large. Maximum size is 5MB.");
-                    input.value = "";
-                }
-            }
+        // Helper to read file as Base64
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
         }
 
         // Setup validation highlighting for edit form
@@ -637,21 +632,20 @@
             if (visaMatch) visaMatch.checked = true;
 
             if (data['Requires Visa Invitation'] === "Yes") {
-                form.elements['embassyName'].value = data['Embassy/Consulate Name'] || '';
-                var passportUrl = data['Passport Copy URL'];
-                var pDiv = document.getElementById('currentPassport');
-                if (passportUrl && passportUrl !== 'N/A' && passportUrl.indexOf('http') === 0) {
-                    pDiv.innerHTML = `<span class="badge bg-success">Current File:</span> <a href="${passportUrl}" target="_blank" class="text-primary small">View Passport Copy</a><br><small class="text-muted">Upload a new file only if you wish to change it.</small>`;
-                    pDiv.style.display = 'block';
+                form.elements['embassyName'].value = data['Embassy Name'] || '';
+                var linkContainer = document.getElementById('passportLinkContainer');
+                if (data['Passport Link'] && data['Passport Link'] !== 'N/A') {
+                    linkContainer.innerHTML = `<a href="${data['Passport Link']}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
                 } else {
-                    pDiv.style.display = 'none';
+                    linkContainer.innerHTML = `<span class="text-danger small d-block mb-2">No passport uploaded yet.</span>`;
+                    document.getElementById('passportFile').setAttribute('required', 'required');
                 }
             }
             toggleVisaField(); // Refresh UI State
         }
 
         // Step 2: Save Updates
-        function handleUpdateSubmit(event) {
+        async function handleUpdateSubmit(event) {
             event.preventDefault();
             var form = document.getElementById('editForm');
             var updateBtn = document.getElementById('updateBtn');
@@ -663,58 +657,53 @@
             alertMsg.className = "alert alert-info";
             alertMsg.textContent = "Saving changes...";
 
-            // Collect form data
-            var formData = new FormData(form);
-            var dataObject = {};
-            formData.forEach((value, key) => {
-                if (key !== 'passportFile') dataObject[key] = value;
-            });
-            dataObject['action'] = 'update';
+            try {
+                var formData = new FormData(form);
+                var visaRequired = formData.get('visaRequired');
 
-            // Handle File if present
-            var fileInput = document.getElementById('passportFile');
-            if (fileInput && fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    dataObject['passportBase64'] = e.target.result;
-                    dataObject['passportName'] = file.name;
-                    sendUpdateData(dataObject);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                sendUpdateData(dataObject);
-            }
-        }
-
-        function sendUpdateData(payload) {
-            var updateBtn = document.getElementById('updateBtn');
-            var updateSpinner = document.getElementById('updateSpinner');
-            var alertMsg = document.getElementById('editAlertMsg');
-
-            fetch(SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    updateBtn.disabled = false;
-                    updateSpinner.style.display = 'none';
-
-                    if (data.status === "Success") {
-                        alertMsg.className = "alert alert-success";
-                        alertMsg.textContent = "Success! Your registration details have been updated.";
-                        window.scrollTo(0, 0);
-                    } else {
-                        throw new Error(data.message);
+                if (visaRequired === 'Yes') {
+                    const fileInput = document.getElementById('passportFile');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const base64Content = await readFileAsBase64(file);
+                        formData.append('passportFileContent', base64Content);
+                        formData.append('passportFileName', file.name);
                     }
-                })
-                .catch(error => {
-                    updateBtn.disabled = false;
-                    updateSpinner.style.display = 'none';
-                    alertMsg.className = "alert alert-danger";
-                    alertMsg.textContent = "Error: " + error.message;
+                }
+
+                // Remove file object
+                formData.delete('passportFile');
+
+                var searchParams = new URLSearchParams(formData);
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: searchParams
                 });
+                
+                const data = await response.json();
+
+                updateBtn.disabled = false;
+                updateSpinner.style.display = 'none';
+
+                if (data.status === "Success") {
+                    alertMsg.className = "alert alert-success";
+                    alertMsg.textContent = "Success! Your registration details have been updated.";
+                    window.scrollTo(0, 0);
+                    
+                    // Refresh data to show new link if uploaded
+                    if (data.newPassportLink) {
+                        document.getElementById('passportLinkContainer').innerHTML = `<a href="${data.newPassportLink}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                updateBtn.disabled = false;
+                updateSpinner.style.display = 'none';
+                alertMsg.className = "alert alert-danger";
+                alertMsg.textContent = "Error: " + error.message;
+            }
         }
     </script>
 
