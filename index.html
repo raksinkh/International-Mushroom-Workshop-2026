@@ -118,7 +118,7 @@
 
     <div class="container">
         <div class="form-container">
-            <h2 class="mb-4 text-center">FMFC Global Training Programme</h2>
+            <h2 class="mb-4 text-center">FMFC Global Training Programme v2</h2>
             <p class="text-muted text-center mb-4">Innovative Farmers, Traditional Medicine, Healthy Foods and
                 Cosmetics.</p>
 
@@ -447,91 +447,92 @@
     </div>
 
     <script>
-        // LATEST PRODUCTION SCRIPT URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxp5HdJ08I_3YA1jQJLPM3c2Z24hV35x09ziWk39Tqk8ZBGXib_8OWjBEAtvYPXpXG/exec";
+        // LATEST PRODUCTION SCRIPT URL (BRAND NEW PROJECT)
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHNaO-yEQMsytR-i0okoUfnzsDVQSeco6Aqe5oh838P_1ISaak_yFsKZbQv66RtXQG/exec";
+        
 
-    // Toggle the Visa Address field visibility
-    function toggleVisaField() {
-    var visaYes = document.getElementById("visaYes");
-    var detailsContainer = document.getElementById("visaDetailsContainer");
-    var passportInput = document.getElementById("passportFile");
-    var embassyInput = document.getElementById("embassyName");
+        // Toggle the Visa Address field visibility
+        function toggleVisaField() {
+            var visaYes = document.getElementById("visaYes");
+            var detailsContainer = document.getElementById("visaDetailsContainer");
+            var passportInput = document.getElementById("passportFile");
+            var embassyInput = document.getElementById("embassyName");
 
-    if (visaYes && visaYes.checked) {
-    detailsContainer.classList.remove("hidden-field");
-    passportInput.setAttribute("required", "required");
-    embassyInput.setAttribute("required", "required");
-    } else {
-    detailsContainer.classList.add("hidden-field");
-    passportInput.removeAttribute("required");
-    embassyInput.removeAttribute("required");
-    passportInput.value = "";
-    embassyInput.value = "";
-    }
-    }
+            if (visaYes && visaYes.checked) {
+                detailsContainer.classList.remove("hidden-field");
+                passportInput.setAttribute("required", "required");
+                embassyInput.setAttribute("required", "required");
+            } else {
+                detailsContainer.classList.add("hidden-field");
+                passportInput.removeAttribute("required");
+                embassyInput.removeAttribute("required");
+                passportInput.value = "";
+                embassyInput.value = "";
+            }
+        }
 
-    // Helper to read file as Base64
-    function readFileAsBase64(file) {
-    return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-    reader.readAsDataURL(file);
-    });
-    }
+        // Helper to read file as Base64
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
 
-    // Handle Form Submission via fetch API
-    async function handleFormSubmit(event) {
-    event.preventDefault();
+        // Handle Form Submission via fetch API
+        async function handleFormSubmit(event) {
+            event.preventDefault();
 
-    var form = document.getElementById('registrationForm');
-    var submitBtn = document.getElementById('submitBtn');
-    var spinner = document.querySelector('.spinner-border');
-    var alertMsg = document.getElementById('alertMessage');
+            var form = document.getElementById('registrationForm');
+            var submitBtn = document.getElementById('submitBtn');
+            var spinner = document.querySelector('.spinner-border');
+            var alertMsg = document.getElementById('alertMessage');
 
-    if (SCRIPT_URL === "YOUR_WEB_APP_URL_HERE") {
-    alert("Please replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Web App URL in the HTML code.");
-    return;
-    }
+            if (SCRIPT_URL === "YOUR_WEB_APP_URL_HERE") {
+                alert("Please replace 'YOUR_WEB_APP_URL_HERE' with your actual Google Apps Script Web App URL in the HTML code.");
+                return;
+            }
 
-    // UI Loading state
-    submitBtn.disabled = true;
-    spinner.style.display = 'inline-block';
-    alertMsg.classList.add('d-none');
+            // UI Loading state
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            alertMsg.classList.add('d-none');
 
-    try {
-    var formData = new FormData(form);
-    var visaRequired = formData.get('visaRequired');
+            try {
+                var formData = new FormData(form);
+                var visaRequired = formData.get('visaRequired');
 
-    // If visa is required, handle the file upload
-    if (visaRequired === 'Yes') {
-    const fileInput = document.getElementById('passportFile');
-    if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const base64Content = await readFileAsBase64(file);
-    formData.append('passportFileContent', base64Content);
-    formData.append('passportFileName', file.name);
-    }
-    }
+                // If visa is required, handle the file upload
+                if (visaRequired === 'Yes') {
+                    const fileInput = document.getElementById('passportFile');
+                    if (fileInput.files.length > 0) {
+                        const file = fileInput.files[0];
+                        const base64Content = await readFileAsBase64(file);
+                        formData.append('passportFileContent', base64Content);
+                        formData.append('passportFileName', file.name);
+                    }
+                }
 
-    formData.append('action', 'register');
+                formData.append('action', 'register');
 
-    // Remove the actual file object from formData to avoid issues with URLSearchParams
-    formData.delete('passportFile');
+                // Remove the actual file object from formData to avoid issues with URLSearchParams
+                formData.delete('passportFile');
 
-    var searchParams = new URLSearchParams(formData);
+                var searchParams = new URLSearchParams(formData);
 
-    // Added cache-busting to prevent browser from reusing old failed requests
-    const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
-    method: "POST",
-    body: searchParams
-    });
+                // Added cache-busting to prevent browser from reusing old failed requests
+                const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
+                    method: "POST",
+                    body: searchParams
+                });
 
-    const data = await response.json();
+                const data = await response.json();
 
-    if (data.status === "Success") {
-    // Dynamically inject the confirmation page into the current view
-    document.querySelector('.container').innerHTML = `
+                if (data.status === "Success") {
+                    // Dynamically inject the confirmation page into the current view
+                    document.querySelector('.container').innerHTML = `
     <div class="form-container" style="max-width: 600px; text-align: center; padding: 60px 40px; margin: auto;">
         <div
             style="width: 80px; height: 80px; border-radius: 50%; background-color: #e6f2f2; color: #007573; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
@@ -546,56 +547,56 @@
             for the upcoming workshop in Chiang Rai. We have safely received your details and will be in touch soon.</p>
     </div>
     `;
-    window.scrollTo(0, 0);
-    } else {
-    throw new Error(data.message || "Unknown error occurred");
-    }
-    } catch (error) {
-    submitBtn.disabled = false;
-    spinner.style.display = 'none';
-    alertMsg.className = "alert alert-danger";
-    alertMsg.textContent = "Error: " + error.message;
-    alertMsg.classList.remove('d-none');
-    }
-    }
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error(data.message || "Unknown error occurred");
+                }
+            } catch (error) {
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                alertMsg.className = "alert alert-danger";
+                alertMsg.textContent = "Error: " + error.message;
+                alertMsg.classList.remove('d-none');
+            }
+        }
 
-    // Setup clear visual validation highlighting
-    document.addEventListener('DOMContentLoaded', function () {
-    var inputs = document.querySelectorAll('.form-control, .form-select, .form-check-input');
+        // Setup clear visual validation highlighting
+        document.addEventListener('DOMContentLoaded', function () {
+            var inputs = document.querySelectorAll('.form-control, .form-select, .form-check-input');
 
-    inputs.forEach(function (input) {
-    // When browser detects a missing required field upon submit
-    input.addEventListener('invalid', function (e) {
-    e.target.classList.add('input-error');
-    });
+            inputs.forEach(function (input) {
+                // When browser detects a missing required field upon submit
+                input.addEventListener('invalid', function (e) {
+                    e.target.classList.add('input-error');
+                });
 
-    // When user corrects the field
-    input.addEventListener('input', function (e) {
-    if (e.target.validity.valid) {
-    e.target.classList.remove('input-error');
-    // If it's a radio button, clear the error from all siblings in the same group
-    if (e.target.type === 'radio') {
-    var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
-    siblings.forEach(function (radio) {
-    radio.classList.remove('input-error');
-    });
-    }
-    }
-    });
+                // When user corrects the field
+                input.addEventListener('input', function (e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        // If it's a radio button, clear the error from all siblings in the same group
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function (radio) {
+                                radio.classList.remove('input-error');
+                            });
+                        }
+                    }
+                });
 
-    input.addEventListener('change', function (e) {
-    if (e.target.validity.valid) {
-    e.target.classList.remove('input-error');
-    if (e.target.type === 'radio') {
-    var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
-    siblings.forEach(function (radio) {
-    radio.classList.remove('input-error');
-    });
-    }
-    }
-    });
-    });
-    });
+                input.addEventListener('change', function (e) {
+                    if (e.target.validity.valid) {
+                        e.target.classList.remove('input-error');
+                        if (e.target.type === 'radio') {
+                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+                            siblings.forEach(function (radio) {
+                                radio.classList.remove('input-error');
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
