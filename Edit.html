@@ -355,12 +355,15 @@
                     <div class="mb-3">
                         <label class="form-label">Passport Copy</label>
                         <div id="passportLinkContainer" class="mb-2"></div>
-                        <input type="file" class="form-control" id="passportFile" name="passportFile" accept="image/*,.pdf">
+                        <input type="file" class="form-control" id="passportFile" name="passportFile"
+                            accept="image/*,.pdf">
                         <small class="text-muted">Upload a new file only if you wish to update the current copy.</small>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Name of the Royal Thai Embassy/Consulate-General where you will apply for a visa: *</label>
-                        <input type="text" class="form-control" id="embassyName" name="embassyName" placeholder="e.g. Embassy in Beijing">
+                        <label class="form-label">Name of the Royal Thai Embassy/Consulate-General where you will apply
+                            for a visa: *</label>
+                        <input type="text" class="form-control" id="embassyName" name="embassyName"
+                            placeholder="e.g. Embassy in Beijing">
                     </div>
                 </div>
 
@@ -454,7 +457,7 @@
 
     <script>
         // MUST MATCH YOUR INDEX.HTML DEPLOYED SCRIPT URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYMm2JRaSSBe9V8pNXOTGFAcAhljfgLKTLxjbNlKQ57QV4cuuov86GtqV1U4ExuLKr/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_morXjnQQ-_M4gNoYH1OfAhnqQ_gJLv3l9j_y9ES43oVoMqKmwsok4g-873FfRdqc/exec";
 
         // Toggle Visa Address field
         function toggleVisaField() {
@@ -680,7 +683,7 @@
                     method: "POST",
                     body: searchParams
                 });
-                
+
                 const data = await response.json();
 
                 updateBtn.disabled = false;
@@ -690,7 +693,7 @@
                     alertMsg.className = "alert alert-success";
                     alertMsg.textContent = "Success! Your registration details have been updated.";
                     window.scrollTo(0, 0);
-                    
+
                     // Refresh data to show new link if uploaded
                     if (data.newPassportLink) {
                         document.getElementById('passportLinkContainer').innerHTML = `<a href="${data.newPassportLink}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
