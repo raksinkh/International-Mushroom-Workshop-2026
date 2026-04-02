@@ -455,9 +455,8 @@
         </div>
     </div>
 
-    <script>
-        // MUST MATCH YOUR INDEX.HTML DEPLOYED SCRIPT URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_morXjnQQ-_M4gNoYH1OfAhnqQ_gJLv3l9j_y9ES43oVoMqKmwsok4g-873FfRdqc/exec";
+        // LATEST PRODUCTION SCRIPT URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryfj6vK-8QlmnXWezf9SjdfOzFWEWPlpnzwrZI7Twovv1pIljwD8sNDTAhW65rnE9/exec"; 
 
         // Toggle Visa Address field
         function toggleVisaField() {
@@ -679,7 +678,7 @@
 
                 var searchParams = new URLSearchParams(formData);
 
-                const response = await fetch(SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
                     method: "POST",
                     body: searchParams
                 });
