@@ -455,258 +455,262 @@
         </div>
     </div>
 
-        // LATEST PRODUCTION SCRIPT URL
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryfj6vK-8QlmnXWezf9SjdfOzFWEWPlpnzwrZI7Twovv1pIljwD8sNDTAhW65rnE9/exec"; 
+    <script>
+        // LATEST PRODUCTION SCRIPT URL (BRAND NEW PROJECT)
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHNaO-yEQMsytR-i0okoUfnzsDVQSeco6Aqe5oh838P_1ISaak_yFsKZbQv66RtXQG/exec";
+        
 
-        // Toggle Visa Address field
-        function toggleVisaField() {
-            var visaYes = document.getElementById("visaYes");
-            var detailsContainer = document.getElementById("visaDetailsContainer");
-            var passportInput = document.getElementById("passportFile");
-            var embassyInput = document.getElementById("embassyName");
+    // Toggle Visa Address field
+    function toggleVisaField() {
+    var visaYes = document.getElementById("visaYes");
+    var detailsContainer = document.getElementById("visaDetailsContainer");
+    var passportInput = document.getElementById("passportFile");
+    var embassyInput = document.getElementById("embassyName");
 
-            if (visaYes && visaYes.checked) {
-                detailsContainer.classList.remove("hidden-field");
-                // In Edit mode, passport is optional if already uploaded
-                embassyInput.setAttribute("required", "required");
-            } else {
-                detailsContainer.classList.add("hidden-field");
-                passportInput.removeAttribute("required");
-                embassyInput.removeAttribute("required");
-                passportInput.value = "";
-                embassyInput.value = "";
-            }
-        }
+    if (visaYes && visaYes.checked) {
+    detailsContainer.classList.remove("hidden-field");
+    // In Edit mode, passport is optional if already uploaded
+    embassyInput.setAttribute("required", "required");
+    } else {
+    detailsContainer.classList.add("hidden-field");
+    passportInput.removeAttribute("required");
+    embassyInput.removeAttribute("required");
+    passportInput.value = "";
+    embassyInput.value = "";
+    }
+    }
 
-        // Helper to read file as Base64
-        function readFileAsBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
+    // Helper to read file as Base64
+    function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+    });
+    }
 
-        // Setup validation highlighting for edit form
-        document.addEventListener('DOMContentLoaded', function () {
-            // Check for magic link auto-login URL parameters
-            var params = new URLSearchParams(window.location.search);
-            var urlEmail = params.get('email');
-            var urlCode = params.get('code');
+    // Setup validation highlighting for edit form
+    document.addEventListener('DOMContentLoaded', function () {
+    // Check for magic link auto-login URL parameters
+    var params = new URLSearchParams(window.location.search);
+    var urlEmail = params.get('email');
+    var urlCode = params.get('code');
 
-            if (urlEmail && urlCode) {
-                document.getElementById('loginEmail').value = urlEmail;
-                document.getElementById('loginCode').value = urlCode;
-                document.getElementById('loginBtn').click(); // Auto-trigger login sequence
-            }
+    if (urlEmail && urlCode) {
+    document.getElementById('loginEmail').value = urlEmail;
+    document.getElementById('loginCode').value = urlCode;
+    document.getElementById('loginBtn').click(); // Auto-trigger login sequence
+    }
 
             var inputs = document.querySelectorAll('#editForm .form-control, #editForm .form-select, #editForm .form-check-input');
-            inputs.forEach(function (input) {
-                input.addEventListener('invalid', function (e) {
-                    e.target.classList.add('input-error');
-                });
-                input.addEventListener('input', function (e) {
-                    if (e.target.validity.valid) {
-                        e.target.classList.remove('input-error');
-                        if (e.target.type === 'radio') {
-                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
-                            siblings.forEach(function (r) { r.classList.remove('input-error'); });
-                        }
-                    }
-                });
-                input.addEventListener('change', function (e) {
-                    if (e.target.validity.valid) {
-                        e.target.classList.remove('input-error');
-                        if (e.target.type === 'radio') {
-                            var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
-                            siblings.forEach(function (r) { r.classList.remove('input-error'); });
-                        }
-                    }
-                });
-            });
-        });
+    inputs.forEach(function (input) {
+    input.addEventListener('invalid', function (e) {
+    e.target.classList.add('input-error');
+    });
+    input.addEventListener('input', function (e) {
+    if (e.target.validity.valid) {
+    e.target.classList.remove('input-error');
+    if (e.target.type === 'radio') {
+    var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+    siblings.forEach(function (r) { r.classList.remove('input-error'); });
+    }
+    }
+    });
+    input.addEventListener('change', function (e) {
+    if (e.target.validity.valid) {
+    e.target.classList.remove('input-error');
+    if (e.target.type === 'radio') {
+    var siblings = document.querySelectorAll('input[name="' + e.target.name + '"]');
+    siblings.forEach(function (r) { r.classList.remove('input-error'); });
+    }
+    }
+    });
+    });
+    });
 
-        // Step 1: Login & Fetch Data
-        function handleLoginSubmit(event) {
-            event.preventDefault();
-            var email = document.getElementById('loginEmail').value.trim();
-            var code = document.getElementById('loginCode').value.trim();
-            var loginBtn = document.getElementById('loginBtn');
-            var loginSpinner = document.getElementById('loginSpinner');
-            var alertMsg = document.getElementById('loginAlertMsg');
+    // Step 1: Login & Fetch Data
+    function handleLoginSubmit(event) {
+    event.preventDefault();
+    var email = document.getElementById('loginEmail').value.trim();
+    var code = document.getElementById('loginCode').value.trim();
+    var loginBtn = document.getElementById('loginBtn');
+    var loginSpinner = document.getElementById('loginSpinner');
+    var alertMsg = document.getElementById('loginAlertMsg');
 
-            loginBtn.disabled = true;
-            loginSpinner.style.display = 'inline-block';
-            alertMsg.classList.add('d-none');
+    loginBtn.disabled = true;
+    loginSpinner.style.display = 'inline-block';
+    alertMsg.classList.add('d-none');
 
-            var payload = new URLSearchParams();
-            payload.append('action', 'fetch');
-            payload.append('email', email);
-            payload.append('secretCode', code);
+    var payload = new URLSearchParams();
+    payload.append('action', 'fetch');
+    payload.append('email', email);
+    payload.append('secretCode', code);
 
-            fetch(SCRIPT_URL, {
-                method: "POST",
-                body: payload
-            })
-                .then(response => response.json())
-                .then(res => {
-                    loginBtn.disabled = false;
-                    loginSpinner.style.display = 'none';
+    fetch(SCRIPT_URL, {
+    method: "POST",
+    body: payload
+    })
+    .then(response => response.json())
+    .then(res => {
+    loginBtn.disabled = false;
+    loginSpinner.style.display = 'none';
 
-                    if (res.status === "Success") {
-                        populateForm(res.data, code);
-                        document.getElementById('loginSection').style.display = 'none';
-                        document.getElementById('editSection').style.display = 'block';
-                        window.scrollTo(0, 0);
-                    } else {
-                        throw new Error(res.message);
-                    }
-                })
-                .catch(error => {
-                    loginBtn.disabled = false;
-                    loginSpinner.style.display = 'none';
-                    alertMsg.className = "alert alert-danger";
-                    alertMsg.textContent = "Error: " + error.message;
-                    alertMsg.classList.remove('d-none');
-                });
-        }
+    if (res.status === "Success") {
+    populateForm(res.data, code);
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('editSection').style.display = 'block';
+    window.scrollTo(0, 0);
+    } else {
+    throw new Error(res.message);
+    }
+    })
+    .catch(error => {
+    loginBtn.disabled = false;
+    loginSpinner.style.display = 'none';
+    alertMsg.className = "alert alert-danger";
+    alertMsg.textContent = "Error: " + error.message;
+    alertMsg.classList.remove('d-none');
+    });
+    }
 
-        // Helper to populate fields gracefully
-        function populateForm(data, secretCode) {
-            var form = document.getElementById('editForm');
+    // Helper to populate fields gracefully
+    function populateForm(data, secretCode) {
+    var form = document.getElementById('editForm');
 
-            // Set Hidden Identifiers
-            document.getElementById('editFormEmail').value = data['Email'] || '';
-            document.getElementById('hiddenSecretCode').value = secretCode;
+    // Set Hidden Identifiers
+    document.getElementById('editFormEmail').value = data['Email'] || '';
+    document.getElementById('hiddenSecretCode').value = secretCode;
 
-            // Standard Inputs
-            form.elements['fullName'].value = data['Full Name'] || '';
-            form.elements['nationality'].value = data['Nationality'] || '';
-            form.elements['institution'].value = data['Institution / Organization'] || '';
-            form.elements['position'].value = data['Position / Title'] || '';
-            form.elements['phone'].value = data['Phone'] || '';
-            form.elements['workAddress'].value = data['Work Address'] || '';
+    // Standard Inputs
+    form.elements['fullName'].value = data['Full Name'] || '';
+    form.elements['nationality'].value = data['Nationality'] || '';
+    form.elements['institution'].value = data['Institution / Organization'] || '';
+    form.elements['position'].value = data['Position / Title'] || '';
+    form.elements['phone'].value = data['Phone'] || '';
+    form.elements['workAddress'].value = data['Work Address'] || '';
             form.elements['arrivalDate'].value = (data['Arrival Date in Chiang Rai'] || '').split('T')[0]; // Format Date if needed
 
-            form.elements['eduBachelor'].value = data['Education - Bachelor'] || '';
-            form.elements['eduMaster'].value = data['Education - Master'] || '';
-            form.elements['eduDoctoral'].value = data['Education - Doctoral'] || '';
-            form.elements['eduOther'].value = data['Education - Other'] || '';
+    form.elements['eduBachelor'].value = data['Education - Bachelor'] || '';
+    form.elements['eduMaster'].value = data['Education - Master'] || '';
+    form.elements['eduDoctoral'].value = data['Education - Doctoral'] || '';
+    form.elements['eduOther'].value = data['Education - Other'] || '';
 
-            form.elements['arrivalFlightNum'].value = data['Arrival Flight Number'] || '';
-            form.elements['arrivalFlightFrom'].value = data['Arrival Flight From'] || '';
-            form.elements['arrivalFlightTo'].value = data['Arrival Flight To'] || '';
+    form.elements['arrivalFlightNum'].value = data['Arrival Flight Number'] || '';
+    form.elements['arrivalFlightFrom'].value = data['Arrival Flight From'] || '';
+    form.elements['arrivalFlightTo'].value = data['Arrival Flight To'] || '';
 
-            form.elements['departureFlightNum'].value = data['Departure Flight Number'] || '';
-            form.elements['departureFlightFrom'].value = data['Departure Flight From'] || '';
-            form.elements['departureFlightTo'].value = data['Departure Flight To'] || '';
+    form.elements['departureFlightNum'].value = data['Departure Flight Number'] || '';
+    form.elements['departureFlightFrom'].value = data['Departure Flight From'] || '';
+    form.elements['departureFlightTo'].value = data['Departure Flight To'] || '';
 
-            form.elements['emgName'].value = data['Emergency Contact Name'] || '';
-            form.elements['emgRelationship'].value = data['Emergency Contact Relationship'] || '';
-            form.elements['emgPhone'].value = data['Emergency Contact Phone'] || '';
+    form.elements['emgName'].value = data['Emergency Contact Name'] || '';
+    form.elements['emgRelationship'].value = data['Emergency Contact Relationship'] || '';
+    form.elements['emgPhone'].value = data['Emergency Contact Phone'] || '';
 
-            // Selects
-            if (data['Gender']) form.elements['gender'].value = data['Gender'];
+    // Selects
+    if (data['Gender']) form.elements['gender'].value = data['Gender'];
 
-            // Generic Radio Helper
-            function setRadio(name, val, otherBoxId, otherInputName) {
-                var match = document.querySelector(`input[name="${name}"][value="${val}"]`);
-                if (match) {
-                    match.checked = true;
-                } else if (val && val !== 'N/A') {
-                    document.getElementById(otherBoxId).checked = true;
-                    form.elements[otherInputName].value = val;
-                }
-            }
+    // Generic Radio Helper
+    function setRadio(name, val, otherBoxId, otherInputName) {
+    var match = document.querySelector(`input[name="${name}"][value="${val}"]`);
+    if (match) {
+    match.checked = true;
+    } else if (val && val !== 'N/A') {
+    document.getElementById(otherBoxId).checked = true;
+    form.elements[otherInputName].value = val;
+    }
+    }
 
-            setRadio('occupation', data['Current Occupation'], 'occOther', 'occupationOther');
-            setRadio('foodPreference', data['Food Preference'], 'foodOther', 'foodPreferenceOther');
+    setRadio('occupation', data['Current Occupation'], 'occOther', 'occupationOther');
+    setRadio('foodPreference', data['Food Preference'], 'foodOther', 'foodPreferenceOther');
 
-            var progMatch = document.querySelector(`input[name="programme"][value="${data['Programme']}"]`);
-            if (progMatch) progMatch.checked = true;
+    var progMatch = document.querySelector(`input[name="programme"][value="${data['Programme']}"]`);
+    if (progMatch) progMatch.checked = true;
 
-            // Specific Radios
-            var accMatch = document.querySelector(`input[name="accommodation"][value="${data['Accommodation']}"]`);
-            if (accMatch) accMatch.checked = true;
+    // Specific Radios
+    var accMatch = document.querySelector(`input[name="accommodation"][value="${data['Accommodation']}"]`);
+    if (accMatch) accMatch.checked = true;
 
-            var visaMatch = document.querySelector(`input[name="visaRequired"][value="${data['Requires Visa Invitation']}"]`);
-            if (visaMatch) visaMatch.checked = true;
+    var visaMatch = document.querySelector(`input[name="visaRequired"][value="${data['Requires Visa Invitation']}"]`);
+    if (visaMatch) visaMatch.checked = true;
 
-            if (data['Requires Visa Invitation'] === "Yes") {
-                form.elements['embassyName'].value = data['Embassy Name'] || '';
-                var linkContainer = document.getElementById('passportLinkContainer');
-                if (data['Passport Link'] && data['Passport Link'] !== 'N/A') {
-                    linkContainer.innerHTML = `<a href="${data['Passport Link']}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
-                } else {
-                    linkContainer.innerHTML = `<span class="text-danger small d-block mb-2">No passport uploaded yet.</span>`;
-                    document.getElementById('passportFile').setAttribute('required', 'required');
-                }
-            }
-            toggleVisaField(); // Refresh UI State
-        }
+    if (data['Requires Visa Invitation'] === "Yes") {
+    form.elements['embassyName'].value = data['Embassy Name'] || '';
+    var linkContainer = document.getElementById('passportLinkContainer');
+    if (data['Passport Link'] && data['Passport Link'] !== 'N/A') {
+    linkContainer.innerHTML = `<a href="${data['Passport Link']}" target="_blank"
+        class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
+    } else {
+    linkContainer.innerHTML = `<span class="text-danger small d-block mb-2">No passport uploaded yet.</span>`;
+    document.getElementById('passportFile').setAttribute('required', 'required');
+    }
+    }
+    toggleVisaField(); // Refresh UI State
+    }
 
-        // Step 2: Save Updates
-        async function handleUpdateSubmit(event) {
-            event.preventDefault();
-            var form = document.getElementById('editForm');
-            var updateBtn = document.getElementById('updateBtn');
-            var updateSpinner = document.getElementById('updateSpinner');
-            var alertMsg = document.getElementById('editAlertMsg');
+    // Step 2: Save Updates
+    async function handleUpdateSubmit(event) {
+    event.preventDefault();
+    var form = document.getElementById('editForm');
+    var updateBtn = document.getElementById('updateBtn');
+    var updateSpinner = document.getElementById('updateSpinner');
+    var alertMsg = document.getElementById('editAlertMsg');
 
-            updateBtn.disabled = true;
-            updateSpinner.style.display = 'inline-block';
-            alertMsg.className = "alert alert-info";
-            alertMsg.textContent = "Saving changes...";
+    updateBtn.disabled = true;
+    updateSpinner.style.display = 'inline-block';
+    alertMsg.className = "alert alert-info";
+    alertMsg.textContent = "Saving changes...";
 
-            try {
-                var formData = new FormData(form);
-                var visaRequired = formData.get('visaRequired');
+    try {
+    var formData = new FormData(form);
+    var visaRequired = formData.get('visaRequired');
 
-                if (visaRequired === 'Yes') {
-                    const fileInput = document.getElementById('passportFile');
-                    if (fileInput.files.length > 0) {
-                        const file = fileInput.files[0];
-                        const base64Content = await readFileAsBase64(file);
-                        formData.append('passportFileContent', base64Content);
-                        formData.append('passportFileName', file.name);
-                    }
-                }
+    if (visaRequired === 'Yes') {
+    const fileInput = document.getElementById('passportFile');
+    if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const base64Content = await readFileAsBase64(file);
+    formData.append('passportFileContent', base64Content);
+    formData.append('passportFileName', file.name);
+    }
+    }
 
-                // Remove file object
-                formData.delete('passportFile');
+    // Remove file object
+    formData.delete('passportFile');
 
-                var searchParams = new URLSearchParams(formData);
+    var searchParams = new URLSearchParams(formData);
 
-                const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
-                    method: "POST",
-                    body: searchParams
-                });
+    const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
+    method: "POST",
+    body: searchParams
+    });
 
-                const data = await response.json();
+    const data = await response.json();
 
-                updateBtn.disabled = false;
-                updateSpinner.style.display = 'none';
+    updateBtn.disabled = false;
+    updateSpinner.style.display = 'none';
 
-                if (data.status === "Success") {
-                    alertMsg.className = "alert alert-success";
-                    alertMsg.textContent = "Success! Your registration details have been updated.";
-                    window.scrollTo(0, 0);
+    if (data.status === "Success") {
+    alertMsg.className = "alert alert-success";
+    alertMsg.textContent = "Success! Your registration details have been updated.";
+    window.scrollTo(0, 0);
 
-                    // Refresh data to show new link if uploaded
-                    if (data.newPassportLink) {
-                        document.getElementById('passportLinkContainer').innerHTML = `<a href="${data.newPassportLink}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
-                    }
-                } else {
-                    throw new Error(data.message);
-                }
-            } catch (error) {
-                updateBtn.disabled = false;
-                updateSpinner.style.display = 'none';
-                alertMsg.className = "alert alert-danger";
-                alertMsg.textContent = "Error: " + error.message;
-            }
-        }
+    // Refresh data to show new link if uploaded
+    if (data.newPassportLink) {
+    document.getElementById('passportLinkContainer').innerHTML = `<a href="${data.newPassportLink}" target="_blank"
+        class="btn btn-sm btn-outline-primary mb-2">View Current Passport Copy</a>`;
+    }
+    } else {
+    throw new Error(data.message);
+    }
+    } catch (error) {
+    updateBtn.disabled = false;
+    updateSpinner.style.display = 'none';
+    alertMsg.className = "alert alert-danger";
+    alertMsg.textContent = "Error: " + error.message;
+    }
+    }
     </script>
 
 </body>
