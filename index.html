@@ -118,7 +118,7 @@
 
     <div class="container">
         <div class="form-container">
-            <h2 class="mb-4 text-center">FMFC Global Training Programme v2</h2>
+            <h2 class="mb-4 text-center">FMFC Global Training Programme v3</h2>
             <p class="text-muted text-center mb-4">Innovative Farmers, Traditional Medicine, Healthy Foods and
                 Cosmetics.</p>
 
@@ -449,7 +449,7 @@
     <script>
         // LATEST PRODUCTION SCRIPT URL (BRAND NEW PROJECT)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHNaO-yEQMsytR-i0okoUfnzsDVQSeco6Aqe5oh838P_1ISaak_yFsKZbQv66RtXQG/exec";
-        
+
 
         // Toggle the Visa Address field visibility
         function toggleVisaField() {
@@ -509,6 +509,12 @@
                     const fileInput = document.getElementById('passportFile');
                     if (fileInput.files.length > 0) {
                         const file = fileInput.files[0];
+                        
+                        // [UX UPDATE] 5MB File Size Limit Check
+                        if (file.size > 5 * 1024 * 1024) {
+                            throw new Error("File is too large (" + (file.size/1024/1024).toFixed(2) + "MB). Please upload a file smaller than 5MB.");
+                        }
+
                         const base64Content = await readFileAsBase64(file);
                         formData.append('passportFileContent', base64Content);
                         formData.append('passportFileName', file.name);
