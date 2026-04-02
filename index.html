@@ -446,8 +446,8 @@
         </div>
     </div>
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzxp5HdJ08I_3YA1jQJLPM3c2Z24hV35x09ziWk39Tqk8ZBGXib_8OWjBEAtvYPXpXG/exec"; // Replace with your published Google Apps Script Web App URL
+        // LATEST PRODUCTION SCRIPT URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryfj6vK-8QlmnXWezf9SjdfOzFWEWPlpnzwrZI7Twovv1pIljwD8sNDTAhW65rnE9/exec"; 
 
         // Toggle the Visa Address field visibility
         function toggleVisaField() {
@@ -520,7 +520,8 @@
 
                 var searchParams = new URLSearchParams(formData);
 
-                const response = await fetch(SCRIPT_URL, {
+                // Added cache-busting to prevent browser from reusing old failed requests
+                const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
                     method: "POST",
                     body: searchParams
                 });
